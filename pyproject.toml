@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "newball-sql"
-version = "0.0.1"
+version = "0.1.0"
 description = "Package pour gérer efficacement des imports vers SQL"
 dependencies = [
 	"python-dotenv",
