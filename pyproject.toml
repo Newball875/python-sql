@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "newball-sql"
+version = "0.0.1"
+description = "Package pour gérer efficacement des imports vers SQL"
+dependencies = [
+	"python-dotenv",
+	"SQLAlchemy",
+	"PyYAML",
+	"typing-extensions"
+]
