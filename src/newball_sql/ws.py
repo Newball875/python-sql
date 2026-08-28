@@ -35,6 +35,38 @@ class WS(Base):
 	def recupId(session:Session, id:int):
 		pass
 
+class Migrations(Base):
+	"""
+	Classe pour gérer les migrations via Python
+	"""
+	__tablename__ = "migrations"
+
+	version: Mapped[int] = mapped_column(Integer, primary_key=True)
+
+	@classmethod
+	def afficher(cls, session:Session) -> List[Self]:
+		return session.scalars(select(cls).order_by("version"))
+	
+	@classmethod
+	def recupId(cls, session:Session, id:int) -> Self | None:
+		return session.get(cls, id)
+	
+	@classmethod
+	def creer(cls, session:Session, numero:int) -> Self:
+		test = cls.recupId(session, numero)
+		if test:
+			return test
+		migrations = Migrations(version = numero)
+		session.add(migrations)
+		return migrations
+	
+	@property
+	def table(self) -> str:
+		return self.__tablename__
+	
+	def __repr__(self):
+		return f"Migration n°{self.version}"
+
 ### Fonctions ###
 
 def creerSession() -> Session:
@@ -50,6 +82,20 @@ def creerSession() -> Session:
 	engine = create_engine("postgresql://" + user + ":" + password + "@" + host + "/" + db)
 	Session = sessionmaker(engine)
 	return Session()
+
+def runMigrations(session:Session, sql:str, numero:int) -> None:
+	"""
+	Exécute la migration d'un fichier
+	"""
+	try:
+		session.execute(sql)
+		migrations = Migrations.creer(session, numero)
+		session.commit()
+		print(f"{migrations} réussie")
+	except Exception as e:
+		session.rollback()
+		print(f"Échec de la migration {numero}")
+		raise e
 
 def finJob(session:Session) -> None:
 	"""
