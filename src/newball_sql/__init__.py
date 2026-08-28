@@ -1,4 +1,4 @@
-from .ws import creerSession, finJob, WS, Base
+from .ws import creerSession, finJob, WS, Base, Migrations
 from .utils import readYAML, slugify, findImage, copieImage, createDossier
 
 __all__ = [
@@ -11,5 +11,6 @@ __all__ = [
 	createDossier,
 
 	WS,
-	Base
+	Base,
+	Migrations
 ]
