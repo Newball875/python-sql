@@ -5,7 +5,7 @@ from typing import Self, List
 import os
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, sessionmaker, mapped_column
-from sqlalchemy import Integer, create_engine, select, event
+from sqlalchemy import Integer, create_engine, select, event, text
 from sqlalchemy.dialects.postgresql import insert as postgres_insert
 
 ### Classe des données ###
@@ -95,7 +95,7 @@ def runMigrations(session:Session, sql:str, numero:int) -> None:
 	Exécute la migration d'un fichier
 	"""
 	try:
-		session.execute(sql)
+		session.execute(text(sql))
 		migrations = Migrations.creer(session, numero)
 		session.commit()
 		print(f"{migrations} réussie")
