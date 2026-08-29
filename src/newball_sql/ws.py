@@ -59,6 +59,7 @@ class Migrations(Base):
 				return result.first()
 			return None
 		except Exception:
+			session.rollback()
 			return None
 	
 	@classmethod
