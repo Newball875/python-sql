@@ -53,10 +53,13 @@ class Migrations(Base):
 	
 	@classmethod
 	def recupLast(cls, session:Session) -> Self | None:
-		result = session.scalars(select(cls).order_by(cls.version.desc()))
-		if result:
-			return result.first()
-		return None
+		try:
+			result = session.scalars(select(cls).order_by(cls.version.desc()))
+			if result:
+				return result.first()
+			return None
+		except Exception:
+			return None
 	
 	@classmethod
 	def creer(cls, session:Session, numero:int) -> Self:
